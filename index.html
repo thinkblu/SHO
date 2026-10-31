@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SHO Course Planner</title>
+<meta name="description" content="Day-by-day schedule for the 22-day NIOSH Safety and Health Officer course, 2 Nov to 2 Dec 2026.">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191D24" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SHO Planner">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F2B705'/%3E%3Crect x='14' y='18' width='36' height='32' rx='4' fill='none' stroke='%231A1500' stroke-width='4'/%3E%3Cpath d='M14 28h36M24 12v10M40 12v10' stroke='%231A1500' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+/* Layout: phone-first day planner. Sticky header with a swipeable date strip,
+   then a vertical timeline of the chosen day. Module colours follow safety-sign
+   colours: blue = mandatory, green = safe condition, amber = warning, red = fire. */
+:root {
+  --bg: #EFF1F4;
+  --surface: #FFFFFF;
+  --fg: #151920;
+  --muted: #5B6470;
+  --line: #D8DCE2;
+  --accent: #F2B705;     /* safety yellow: today / now */
+  --on-accent: #1A1500;
+  --m1: #1D5FA8; --m2: #1E7A4C; --m3: #A86400; --m4: #B3261E;
+  --brk: #8A929D;
+  --font-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101318; --surface: #191D24; --fg: #E7EAEE; --muted: #98A1AD; --line: #2B313A;
+    --accent: #F2B705; --on-accent: #1A1500;
+    --m1: #6EA7E6; --m2: #57C08A; --m3: #E6A23A; --m4: #EE736A; --brk: #6E7682;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101318; --surface: #191D24; --fg: #E7EAEE; --muted: #98A1AD; --line: #2B313A;
+  --accent: #F2B705; --on-accent: #1A1500;
+  --m1: #6EA7E6; --m2: #57C08A; --m3: #E6A23A; --m4: #EE736A; --brk: #6E7682;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 15px; line-height: 1.45;
+  min-height: 100%;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface);
+}
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.wrap {
+  max-width: 640px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Header */
+header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--surface); border-bottom: 1px solid var(--line);
+}
+.head-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-block: 12px 8px; }
+.eyebrow { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { margin: 2px 0 0; font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1; letter-spacing: .01em; text-wrap: balance; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+.seg button { border: 0; background: transparent; padding: 6px 10px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+
+.status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); padding-bottom: 8px; min-width: 0; }
+.status b { color: var(--fg); font-weight: 600; }
+.today-btn {
+  margin-left: auto; flex-shrink: 0; border: 0; border-radius: 999px; padding: 4px 12px;
+  background: var(--accent); color: var(--on-accent); font-weight: 600; font-size: 13px; cursor: pointer;
+}
+
+/* Date strip */
+.strip {
+  display: flex; gap: 6px; overflow-x: auto; scroll-snap-type: x proximity;
+  padding-block: 2px 12px; scrollbar-width: none;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  max-width: 640px; margin: 0 auto;
+}
+.strip::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto; width: 54px; scroll-snap-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 6px 0 7px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--bg); cursor: pointer; position: relative;
+}
+.chip.wk { margin-left: 10px; }
+.chip .dow { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.chip .dn { font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 1.05; font-variant-numeric: tabular-nums; }
+.chip .dd { font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chip .bar { position: absolute; left: 10px; right: 10px; bottom: 3px; height: 3px; border-radius: 2px; background: var(--mc); }
+.chip.past { opacity: .55; }
+.chip.hol { cursor: default; border-style: dashed; background: transparent; }
+.chip.hol .dn { color: var(--muted); }
+.chip.hol .dd { font-weight: 600; }
+.holrow { display: flex; align-items: center; gap: 10px; margin: -8px 0 26px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; color: var(--muted); font-size: 13px; }
+.holrow b { color: var(--fg); font-family: var(--font-display); font-size: 18px; font-weight: 700; }
+.chip.is-today { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.chip[aria-selected="true"] { background: var(--fg); border-color: var(--fg); opacity: 1; }
+.chip[aria-selected="true"] .dow, .chip[aria-selected="true"] .dd, .chip[aria-selected="true"] .dn { color: var(--bg); }
+
+/* Day view */
+main { padding-block: 16px 40px; }
+.dayhead { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin-bottom: 14px; }
+.nav { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); cursor: pointer; display: grid; place-items: center; }
+.nav:disabled { opacity: .35; cursor: default; }
+.nav svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+.dayttl { min-width: 0; text-align: center; }
+.dayttl .mod { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--mc); }
+.dayttl .mod::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--mc); }
+.dayttl h2 { margin: 2px 0 0; font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1.05; text-wrap: balance; }
+.dayttl .meta { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.tl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.row { display: grid; grid-template-columns: 52px 1fr; gap: 10px; align-items: stretch; }
+.time { font-family: var(--font-mono); font-size: 12.5px; font-variant-numeric: tabular-nums; color: var(--muted); padding-top: 11px; line-height: 1.25; }
+.time span { display: block; font-size: 11px; opacity: .75; }
+.card {
+  min-width: 0; background: var(--surface); border: 1px solid var(--line);
+  border-left: 4px solid var(--mc); border-radius: 8px; padding: 10px 12px;
+  position: relative;
+}
+.card .t { font-weight: 600; font-size: 15px; line-height: 1.3; overflow-wrap: anywhere; }
+.card .sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.card .dur { font-size: 12px; color: var(--muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.tag { display: inline-block; font-size: 10.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); margin-left: 6px; vertical-align: 2px; }
+.row.cont .card { border-left-style: dashed; }
+.row.now .card { box-shadow: 0 0 0 2px var(--accent); }
+.nowpill { position: absolute; top: -9px; right: 10px; background: var(--accent); color: var(--on-accent); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; }
+
+.row.pause .time { padding-top: 4px; }
+.pausebar { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--brk); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding-block: 4px; }
+.pausebar::after { content: ""; flex: 1; height: 0; border-top: 1px dashed var(--line); }
+.row.pause.meal .pausebar { color: var(--m3); }
+.row.pause.now .pausebar { color: var(--fg); }
+.row.pause.now .pausebar::before { content: "Now"; background: var(--accent); color: var(--on-accent); padding: 0 6px; border-radius: 999px; font-size: 10.5px; }
+
+.endline { margin-top: 12px; font-size: 13px; color: var(--muted); text-align: center; }
+.note { margin-top: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
+.note b { color: var(--fg); }
+
+/* Full list view */
+.daysec { margin-bottom: 26px; }
+.daysec-h {
+  display: flex; align-items: baseline; gap: 10px; width: 100%; text-align: left;
+  background: transparent; border: 0; border-bottom: 2px solid var(--mc); padding: 0 0 6px; margin-bottom: 10px; cursor: pointer;
+}
+.daysec-h .n { font-family: var(--font-display); font-weight: 700; font-size: 22px; }
+.daysec-h .d { font-size: 13px; color: var(--muted); }
+.daysec-h .m { margin-left: auto; font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--mc); white-space: nowrap; }
+.daysec-h.is-today .n::after { content: "Today"; margin-left: 8px; background: var(--accent); color: var(--on-accent); font-family: var(--font-body); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; vertical-align: 4px; }
+
+footer { padding-block: 8px 32px; font-size: 12px; color: var(--muted); }
+footer details { border-top: 1px solid var(--line); padding-top: 12px; }
+footer summary { cursor: pointer; font-weight: 600; color: var(--fg); }
+footer ul { padding-left: 18px; margin: 8px 0 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 2px; background: var(--mc); display: inline-block; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .anim { animation: fadein .18s ease-out; }
+  @keyframes fadein { from { opacity: .4; transform: translateX(var(--dx, 0)); } to { opacity: 1; transform: none; } }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="head-top">
+      <div style="min-width:0">
+        <div class="eyebrow">NIOSH · Safety &amp; Health Officer</div>
+        <h1>SHO Course Planner</h1>
+      </div>
+      <div class="seg" role="group" aria-label="View">
+        <button id="v-day" type="button" aria-pressed="true">Day</button>
+        <button id="v-all" type="button" aria-pressed="false">All days</button>
+      </div>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+  <div class="strip" id="strip" role="tablist" aria-label="Course days"></div>
+</header>
+
+<main class="wrap" id="main"></main>
+
+<footer class="wrap">
+  <div class="legend" id="legend"></div>
+  <details style="margin-top:14px">
+    <summary>About this schedule</summary>
+    <ul>
+      <li>Based on NIOSH course schedule NIOSH-PDD-CS-SHO, Rev. MAST220801. 22 days, 165.5 hours.</li>
+      <li>Runs Mon 2 Nov to Wed 2 Dec 2026. Saturdays and Sundays are skipped.</li>
+      <li>No class on Mon 9 Nov (Deepavali holiday). Days 6 to 22 each run one weekday later.</li>
+      <li>Days 11 and 12: the source lists overlapping times. The first session is shown as 1015–1115 to match its stated hours.</li>
+      <li>Day 21: the source's 1400–1530 session overlaps the tea break, so it is shown as 1400–1515.</li>
+      <li>Day 21 site visit: bring your PPE, including safety boots.</li>
+    </ul>
+  </details>
+</footer>
+
+<script>
+(function () {
+  var B = "BREAK", L = "LUNCH", BF = "BREAKFAST";
+  function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
+  var MODS = {
+    M1: { name: "Module 1", full: "OSH Management", v: "--m1" },
+    M2: { name: "Module 2", full: "OSH Legislation", v: "--m2" },
+    M3: { name: "Module 3", full: "Occupational Health", v: "--m3" },
+    M4: { name: "Module 4", full: "Occupational Safety", v: "--m4" }
+  };
+  var DAYS = [
+    ["M1",[["0830","0900","Registration"],["0900","1000","Course Introduction & Ice Breaking Session"],["1000","1015",B],["1015","1045","Historical Perspective"],["1045","1300","Incident Prevention"],["1300","1400",L],["1400","1515","Incident Prevention (cont.)"],["1515","1530",B],["1530","1800","OSH Management System"]]],
+    ["M1",[["0830","1000","Policy - Organisation & Arrangements"],["1000","1015",B],["1015","1115","Policy - Organisation & Arrangements (cont.)"],["1115","1300","OSH Promotion, Training & Communication"],["1300","1400",L],["1400","1515","OSH Promotion, Training & Communication (cont.)"],["1515","1545","OSH Documentations"],["1545","1600",B],["1600","1730","OSH Documentations (cont.)"],["1730","1830","Information Technology in OSH"]]],
+    ["M1",[["0830","1000","Risk Assessment and Management"],["1000","1015",B],["1015","1300","Risk Assessment and Management (cont.)"],["1300","1400",L],["1400","1530","Risk Assessment and Management (cont.)"],["1530","1545",B],["1545","1630","Risk Assessment and Management (cont.)"],["1630","1900","Personal Protective Equipment"]]],
+    ["M1",[["0830","1000","OSH Objective & Programme"],["1000","1015",B],["1015","1145","OSH Objective & Programme (cont.)"],["1145","1300","Emergency Preparedness and Response"],["1300","1400",L],["1400","1515","Emergency Preparedness and Response (cont.)"],["1515","1530",B],["1530","1730","Emergency Preparedness and Response (cont.)"],["1730","1930","First Aid"]]],
+    ["M1",[["0830","1030","Procurement and Contractor Management"],["1030","1045",B],["1045","1230","Auditing"],["1230","1430",L],["1430","1515","Auditing (cont.)"],["1515","1530",B],["1530","1800","Performance Measurement & Monitoring"]]],
+    ["M1",[["0830","1000","Incident Investigation and Corrective Action"],["1000","1015",B],["1015","1215","Incident Investigation and Corrective Action (cont.)"],["1215","1315","Management Review"],["1315","1415",L]]],
+    ["M2",[["0830","0930","Introduction to OSH Legislation"],["0930","1000","Factories and Machinery Act 1967"],["1000","1015",B],["1015","1145","Factories and Machinery Act 1967 (cont.)"],["1145","1300","Safety Regulations under FMA 1967"],["1300","1400",L],["1400","1445","Safety Regulations under FMA 1967 (cont.)"],["1445","1515","Health Regulations under FMA 1967"],["1515","1530",B],["1530","1700","Health Regulations under FMA 1967 (cont.)"]]],
+    ["M2",[["0830","1000","Occupational Safety and Health Act 1994"],["1000","1015",B],["1015","1245","Occupational Safety and Health Act 1994 (cont.)"],["1245","1400",L],["1400","1500","OSH (Safety and Health Officer) Regulations 1997"],["1500","1515",B],["1515","1745","OSH (Safety and Health Officer) Regulations 1997 (cont.)"]]],
+    ["M2",[["0830","1000","OSH (Safety and Health Committee) Regulations 1996"],["1000","1015",B],["1015","1215","OSH (Safety and Health Committee) Regulations 1996 (cont.)"],["1215","1300","OSH (CIMAH) Regulations 1996","Control of Industrial Major Accident Hazards"],["1300","1400",L],["1400","1600","OSH (CIMAH) Regulations 1996 (cont.)"],["1600","1615",B],["1615","1815","OSH (NADOPOD) Regulations 2004","Notification of Accidents, Dangerous Occurrence, Occupational Poisoning and Occupational Disease"]]],
+    ["M2",[["0830","1000","OSH (USECHH) Regulations 2000","Use and Standards of Exposure of Chemicals Hazardous to Health"],["1000","1015",B],["1015","1100","OSH (USECHH) Regulations 2000 (cont.)"],["1100","1300","OSH (CLASS) Regulations 2013","Classification, Labelling and Safety Data Sheet of Hazardous Chemicals"],["1300","1400",L],["1400","1600","Fire Services Act 1988"],["1600","1615",B],["1615","1745","Social Security Act 1969"]]],
+    ["M2",[["0830","1000","Employment Act 1955"],["1000","1015",B],["1015","1115","Petroleum (Safety Measures) Act 1984 & Gas Supply Act 1993"],["1115","1230","Case Study"],["1230","1430",L],["1430","1515","Case Study (cont.)"],["1515","1530",B],["1530","1730","Introduction & Overview of Other Related Legislation & Codes of Practices"]]],
+    ["M3",[["0830","1000","Overview of Occupational Health"],["1000","1015",B],["1015","1115","Overview of Occupational Health (cont.)"],["1115","1245","Occupational Health Standards"],["1245","1345",L],["1345","1515","Introduction and Fundamentals of Toxicology"],["1515","1530",B],["1530","1600","Introduction and Fundamentals of Toxicology (cont.)"],["1600","1800","Overview and Basic Principles of Industrial Hygiene"]]],
+    ["M3",[["0830","1000","Chemical Hazard"],["1000","1015",B],["1015","1300","Chemical Hazard (cont.)"],["1300","1400",L],["1400","1445","Chemical Hazard (cont.)"],["1445","1545","Chemical Monitoring"],["1545","1600",B],["1600","1730","Chemical Monitoring (cont.)"]]],
+    ["M3",[["0830","1000","Chemical Health Risk Assessment"],["1000","1015",B],["1015","1115","Chemical Safety Data Sheet"],["1115","1300","CLASS"],["1300","1400",L],["1400","1415","CLASS (cont.)"],["1415","1515","Chemical Hazard Management"],["1515","1530",B],["1530","1630","Chemical Hazard Management (cont.)"]]],
+    ["M3",[["0830","1000","Ventilation"],["1000","1015",B],["1015","1145","Indoor Air Quality"],["1145","1245","Biological Monitoring and Medical Surveillance"],["1245","1400",L],["1400","1530","Biological Hazard"],["1530","1545",B],["1545","1745","Report Writing"]]],
+    ["M3",[["0830","1000","Ergonomics"],["1000","1015",B],["1015","1215","Ergonomics (cont.)"],["1215","1230","Ergonomic Risk Factors"],["1230","1430",L],["1430","1515","Ergonomic Risk Factors (cont.)"],["1515","1545","Shift Work"],["1545","1600",B],["1600","1700","Mental Workload"],["1700","1800","Occupational and Psychological Stress"]]],
+    ["M3",[["0830","1000","Physical Hazards","Noise, Radiation, Vibration, Pressurised Environment, Thermal Stress"],["1000","1015",B],["1015","1315","Physical Hazards (cont.)"],["1315","1415",L],["1415","1515","Overview of SOHELP"],["1515","1600","Examination Briefing (ECD)"]]],
+    ["M4",[["0830","1000","Machinery Hazard"],["1000","1015",B],["1015","1215","Machinery Hazard (cont.)"],["1215","1315","Safe Machine Operation"],["1315","1415",L],["1415","1545","Safe Guarding of Machinery"],["1545","1600",B],["1600","1630","Safe Guarding of Machinery (cont.)"],["1630","1730","Maintenance of Machine Guards & Tools"],["1730","1830","Safe Use of Hand Tools & Portable Power Tools"]]],
+    ["M4",[["0830","0930","General Area Fencing"],["0930","1000","Mechanical Handling"],["1000","1015",B],["1015","1245","Mechanical Handling (cont.)"],["1245","1345",L],["1345","1545","Pressurised Equipment"],["1545","1600",B],["1600","1700","Welding Safety"],["1700","1800","Housekeeping and Physical Arrangement"]]],
+    ["M4",[["0830","1030","Electrical Safety"],["1030","1045",B],["1045","1245","Working in Confined Space"],["1245","1345",L],["1345","1445","Working in Confined Space (cont.)"],["1445","1515","Manual Handling"],["1515","1530",B],["1530","1600","Manual Handling (cont.)"],["1600","1700","Transport Safety Defensive Driving (Forklift)"],["1700","1900","Office Safety"]]],
+    ["M4",[["0800","0830",BF],["0830","1300","Site Visit","Bring your PPE, including safety boots"],["1300","1400",L],["1400","1515","Discussion, Report Writing (HIRARC) and Presentation"],["1515","1530",B],["1545","1745","Discussion, Report Writing (HIRARC) and Presentation (cont.)"]]],
+    ["M4",[["0830","1000","Fire Safety"],["1000","1015",B],["1015","1245","Fire Safety (cont.)"],["1245","1445",L],["1445","1615","Construction Safety"],["1615","1630",B],["1630","1800","Construction Safety (cont.)"],["1800","1830","Closing Ceremony"]]]
+  ];
+
+  // No-class weekdays (month is 0-based)
+  var HOLIDAYS = [{ d: new Date(2026, 10, 9), name: "Deepavali holiday" }];
+  function holidayOn(dt) {
+    for (var k = 0; k < HOLIDAYS.length; k++) if (sameDay(HOLIDAYS[k].d, dt)) return HOLIDAYS[k];
+    return null;
+  }
+
+  // Dates: weekdays only, from Mon 2 Nov 2026, skipping holidays
+  var dates = [], d = new Date(2026, 10, 2);
+  while (dates.length < DAYS.length) {
+    var w = d.getDay();
+    if (w !== 0 && w !== 6 && !holidayOn(d)) dates.push(new Date(d));
+    d.setDate(d.getDate() + 1);
+  }
+  // Weekday holidays inside the course, keyed by the course day that follows them
+  var holBefore = {};
+  HOLIDAYS.forEach(function (h) {
+    var w = h.d.getDay();
+    if (w === 0 || w === 6) return;
+    for (var k = 1; k < dates.length; k++) if (dates[k] > h.d) { (holBefore[k] = holBefore[k] || []).push(h); break; }
+  });
+  var DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var DOWL = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  function fmtDate(dt) { return DOW[dt.getDay()] + " " + dt.getDate() + " " + MON[dt.getMonth()]; }
+
+  function mins(s) { return +s.slice(0,2) * 60 + +s.slice(2); }
+  function fmt(s) { return s.slice(0,2) + ":" + s.slice(2); }
+  function dur(m) { var h = Math.floor(m / 60), r = m % 60; return (h ? h + " h" : "") + (h && r ? " " : "") + (r ? r + " min" : ""); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+  function classHours(sess) {
+    var t = 0;
+    sess.forEach(function (s) { if (s[2] !== B && s[2] !== L && s[2] !== BF) t += mins(s[1]) - mins(s[0]); });
+    return t / 60;
+  }
+
+  var store = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  // Read the phone's date and work out which course day to open on:
+  // today's class, otherwise the next class day, otherwise the last day.
+  var now, todayIdx, startOfToday, startIdx;
+  function readToday() {
+    now = new Date();
+    startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    todayIdx = -1;
+    startIdx = DAYS.length - 1;
+    for (var k = 0; k < dates.length; k++) {
+      if (sameDay(dates[k], now)) { todayIdx = k; startIdx = k; break; }
+      if (dates[k] > startOfToday) { startIdx = k; break; }
+    }
+  }
+  readToday();
+
+  var view = "day";
+  var sel = startIdx;
+
+  var strip = document.getElementById("strip");
+  var main = document.getElementById("main");
+  var statusEl = document.getElementById("status");
+
+  // Legend
+  document.getElementById("legend").innerHTML = Object.keys(MODS).map(function (k) {
+    return '<span style="--mc:var(' + MODS[k].v + ')"><i></i>' + MODS[k].name + " · " + MODS[k].full + "</span>";
+  }).join("");
+
+  // Status line
+  function renderStatus() {
+    var msg;
+    var msg, label = "Today";
+    var after = startOfToday > dates[dates.length - 1];
+    if (todayIdx >= 0) msg = "Today is <b>Day " + (todayIdx + 1) + "</b> of 22";
+    else if (startOfToday < dates[0]) {
+      var n = Math.round((dates[0] - startOfToday) / 86400000);
+      msg = "Starts <b>" + fmtDate(dates[0]) + "</b> · in " + n + (n === 1 ? " day" : " days");
+      label = "Day 1";
+    } else if (after) msg = "Course completed on <b>" + fmtDate(dates[dates.length - 1]) + "</b>";
+    else {
+      var why = holidayOn(now) ? holidayOn(now).name : "weekend";
+      msg = "No class today (" + why + ") · next is <b>Day " + (startIdx + 1) + "</b>, " + fmtDate(dates[startIdx]);
+      label = "Next class";
+    }
+    var btn = after ? "" : '<button class="today-btn" id="go-today" type="button">' + label + "</button>";
+    statusEl.innerHTML = '<span style="min-width:0">' + msg + "</span>" + btn;
+    var g = document.getElementById("go-today");
+    if (g) g.onclick = function () { setView("day"); select(startIdx, 0); };
+  }
+
+  // Date strip
+  function renderStrip() {
+    strip.innerHTML = dates.map(function (dt, i) {
+      var mod = MODS[DAYS[i][0]];
+      var cls = "chip";
+      var hols = holBefore[i] || [];
+      var pre = hols.map(function (h) {
+        return '<span class="chip hol' + (h.d.getDay() === 1 ? " wk" : "") + (sameDay(h.d, now) ? " is-today" : "") + '" role="note" aria-label="' + DOWL[h.d.getDay()] + " " + h.d.getDate() + " " + MON[h.d.getMonth()] + ", no class, " + h.name + '">' +
+          '<span class="dow">' + DOW[h.d.getDay()] + '</span><span class="dn">' + h.d.getDate() + '</span><span class="dd">No class</span></span>';
+      }).join("");
+      var holJustBefore = hols.length && (dt - hols[hols.length - 1].d) < 2 * 86400000;
+      if (i > 0 && dt.getDay() === 1 && !holJustBefore) cls += " wk";
+      if (i === todayIdx) cls += " is-today";
+      if (dt < startOfToday && i !== todayIdx) cls += " past";
+      return pre + '<button type="button" role="tab" id="chip-' + i + '" class="' + cls + '" style="--mc:var(' + mod.v + ')" aria-selected="' + (i === sel && view === "day") + '" aria-label="Day ' + (i + 1) + ", " + DOWL[dt.getDay()] + " " + dt.getDate() + " " + MON[dt.getMonth()] + '" data-i="' + i + '">' +
+        '<span class="dow">' + DOW[dt.getDay()] + "</span>" +
+        '<span class="dn">' + dt.getDate() + "</span>" +
+        '<span class="dd">Day ' + (i + 1) + "</span>" +
+        '<span class="bar"></span></button>';
+    }).join("");
+  }
+  strip.addEventListener("click", function (e) {
+    var b = e.target.closest(".chip");
+    if (!b) return;
+    var i = +b.dataset.i;
+    if (view === "all") {
+      var sec = document.getElementById("sec-" + i);
+      if (sec) {
+        var hh = document.querySelector("header").getBoundingClientRect().height;
+        window.scrollTo({ top: sec.getBoundingClientRect().top + window.scrollY - hh - 8, behavior: reduce() ? "auto" : "smooth" });
+      }
+      return;
+    }
+    select(i, i > sel ? 1 : -1);
+  });
+
+  function reduce() { return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
+
+  function centerChip(i) {
+    var c = document.getElementById("chip-" + i);
+    if (!c) return;
+    var target = c.offsetLeft - strip.clientWidth / 2 + c.offsetWidth / 2;
+    strip.scrollTo({ left: Math.max(0, target), behavior: reduce() ? "auto" : "smooth" });
+  }
+
+  function nowMin() { return now.getHours() * 60 + now.getMinutes(); }
+
+  function sessionRows(i) {
+    var sess = DAYS[i][1];
+    var isToday = i === todayIdx;
+    var nm = nowMin();
+    return sess.map(function (s) {
+      var a = mins(s[0]), b = mins(s[1]);
+      var live = isToday && nm >= a && nm < b;
+      var t = s[2];
+      if (t === B || t === L || t === BF) {
+        var label = t === B ? "Tea break" : t === L ? "Lunch" : "Breakfast";
+        return '<li class="row pause' + (t !== B ? " meal" : "") + (live ? " now" : "") + '">' +
+          '<div class="time">' + fmt(s[0]) + "</div>" +
+          '<div class="pausebar">' + label + " · " + dur(b - a) + "</div></li>";
+      }
+      var cont = / \(cont\.\)$/.test(t);
+      var title = cont ? t.replace(/ \(cont\.\)$/, "") : t;
+      return '<li class="row' + (cont ? " cont" : "") + (live ? " now" : "") + '">' +
+        '<div class="time">' + fmt(s[0]) + "<span>" + fmt(s[1]) + "</span></div>" +
+        '<div class="card">' + (live ? '<span class="nowpill">Now</span>' : "") +
+        '<div class="t">' + esc(title) + (cont ? '<span class="tag">cont.</span>' : "") + "</div>" +
+        (s[3] ? '<div class="sub">' + esc(s[3]) + "</div>" : "") +
+        '<div class="dur">' + dur(b - a) + "</div></div></li>";
+    }).join("");
+  }
+
+  function renderDay(dir) {
+    var i = sel, dt = dates[i], mod = MODS[DAYS[i][0]], sess = DAYS[i][1];
+    var first = sess[0][0], last = sess[sess.length - 1][1];
+    var hrs = classHours(sess);
+    var prevSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+    var nextSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+    var extra = "";
+    var holNext = holBefore[i + 1];
+    if (holNext) extra += '<div class="note"><b>No class on ' + fmtDate(holNext[0].d) + '</b> (' + esc(holNext[0].name) + '). Day ' + (i + 2) + ' is on ' + fmtDate(dates[i + 1]) + '.</div>';
+    if (i === 20) extra += '<div class="note"><b>Site visit day.</b> Bring your PPE, including safety boots. Breakfast is at 08:00.</div>';
+    if (i === 16) extra += '<div class="note"><b>Module 3 ends today</b> with the examination briefing.</div>';
+    main.innerHTML =
+      '<section class="anim" style="--mc:var(' + mod.v + ");--dx:" + (dir ? dir * 18 : 0) + 'px">' +
+      '<div class="dayhead">' +
+        '<button class="nav" id="prev" type="button" aria-label="Previous day"' + (i === 0 ? " disabled" : "") + ">" + prevSvg + "</button>" +
+        '<div class="dayttl"><div class="mod">' + mod.name + " · " + mod.full + "</div>" +
+          "<h2>Day " + (i + 1) + " · " + DOW[dt.getDay()] + " " + dt.getDate() + " " + MON[dt.getMonth()] + "</h2>" +
+          '<div class="meta">' + fmt(first) + "–" + fmt(last) + " · " + hrs.toFixed(2).replace(/\.?0+$/, "") + " h of class</div></div>" +
+        '<button class="nav" id="next" type="button" aria-label="Next day"' + (i === DAYS.length - 1 ? " disabled" : "") + ">" + nextSvg + "</button>" +
+      "</div>" +
+      '<ol class="tl">' + sessionRows(i) + "</ol>" + extra +
+      '<div class="endline">' + (i === DAYS.length - 1 ? "End of course · " : "End of Day " + (i + 1) + " · ") + fmt(last) + "</div>" +
+      "</section>";
+    document.getElementById("prev").onclick = function () { if (sel > 0) select(sel - 1, -1); };
+    document.getElementById("next").onclick = function () { if (sel < DAYS.length - 1) select(sel + 1, 1); };
+  }
+
+  function renderAll() {
+    main.innerHTML = DAYS.map(function (day, i) {
+      var dt = dates[i], mod = MODS[day[0]], sess = day[1];
+      var pre = (holBefore[i] || []).map(function (h) {
+        return '<div class="holrow"><b>' + fmtDate(h.d) + '</b><span>No class · ' + esc(h.name) + '</span></div>';
+      }).join("");
+      return pre + '<section class="daysec" id="sec-' + i + '" style="--mc:var(' + mod.v + ')">' +
+        '<button type="button" class="daysec-h' + (i === todayIdx ? " is-today" : "") + '" data-i="' + i + '">' +
+          '<span class="n">Day ' + (i + 1) + "</span>" +
+          '<span class="d">' + DOW[dt.getDay()] + " " + dt.getDate() + " " + MON[dt.getMonth()] + " · " + fmt(sess[0][0]) + "–" + fmt(sess[sess.length - 1][1]) + "</span>" +
+          '<span class="m">' + mod.name + "</span></button>" +
+        '<ol class="tl">' + sessionRows(i) + "</ol></section>";
+    }).join("");
+    main.querySelectorAll(".daysec-h").forEach(function (b) {
+      b.onclick = function () { setView("day"); select(+b.dataset.i, 0); };
+    });
+  }
+
+  function select(i, dir) {
+    sel = i;
+    store.set("sho-day", String(i));
+    strip.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-selected", String(+c.dataset.i === i && view === "day")); });
+    renderDay(dir);
+    centerChip(i);
+    var hdr = document.querySelector("header");
+    if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  function setView(v) {
+    view = v;
+    store.set("sho-view", v);
+    document.getElementById("v-day").setAttribute("aria-pressed", String(v === "day"));
+    document.getElementById("v-all").setAttribute("aria-pressed", String(v === "all"));
+    renderStrip();
+    if (v === "day") { renderDay(0); centerChip(sel); }
+    else { renderAll(); }
+  }
+  document.getElementById("v-day").onclick = function () { if (view !== "day") { setView("day"); window.scrollTo(0, 0); } };
+  document.getElementById("v-all").onclick = function () {
+    if (view === "all") return;
+    setView("all");
+    var target = startIdx;
+    var sec = document.getElementById("sec-" + target);
+    if (sec && target > 0) {
+      var hh = document.querySelector("header").getBoundingClientRect().height;
+      window.scrollTo(0, sec.getBoundingClientRect().top + window.scrollY - hh - 8);
+    } else window.scrollTo(0, 0);
+  };
+
+  // Swipe left / right to change day
+  var sx = 0, sy = 0, tracking = false;
+  main.addEventListener("touchstart", function (e) {
+    if (view !== "day" || e.touches.length !== 1) return;
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY; tracking = true;
+  }, { passive: true });
+  main.addEventListener("touchend", function (e) {
+    if (!tracking) return; tracking = false;
+    var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0 && sel < DAYS.length - 1) select(sel + 1, 1);
+      else if (dx > 0 && sel > 0) select(sel - 1, -1);
+    }
+  }, { passive: true });
+
+  // Keyboard arrows on desktop
+  document.addEventListener("keydown", function (e) {
+    if (view !== "day" || e.target.closest("input,textarea")) return;
+    if (e.key === "ArrowRight" && sel < DAYS.length - 1) select(sel + 1, 1);
+    if (e.key === "ArrowLeft" && sel > 0) select(sel - 1, -1);
+  });
+
+  // Keep the "Now" marker fresh. If the phone's date has changed since the
+  // app was opened (left open overnight), jump to the new day's schedule.
+  function refresh() {
+    var n = new Date();
+    if (!sameDay(n, now)) {
+      readToday();
+      renderStatus();
+      sel = startIdx;
+      setView("day");
+      window.scrollTo(0, 0);
+    } else if (n.getMinutes() !== now.getMinutes()) {
+      now = n;
+      if (todayIdx >= 0 && view === "day" && sel === todayIdx) renderDay(0);
+    }
+  }
+  setInterval(refresh, 30000);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });
+  window.addEventListener("pageshow", refresh);
+
+  renderStatus();
+  setView(view);
+  requestAnimationFrame(function () { centerChip(sel); });
+})();
+</script>
+</body>
+</html>
