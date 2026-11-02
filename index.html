@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SHO Course Planner</title>
-<meta name="description" content="Day-by-day schedule for the 22-day NIOSH Safety and Health Officer course, 2 Nov to 2 Dec 2026.">
+<meta name="description" content="Day-by-day schedule for the 22-day NIOSH Safety and Health Officer course, 2 Nov to 8 Dec 2026.">
 <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#191D24" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -150,6 +150,8 @@ main { padding-block: 16px 40px; }
 }
 .card .t { font-weight: 600; font-size: 15px; line-height: 1.3; overflow-wrap: anywhere; }
 .card .sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.card .trainer { display: inline-block; margin-left: 8px; padding: 0 6px; border-radius: 4px; background: color-mix(in srgb, var(--mc) 14%, transparent); color: var(--mc); font-size: 10.5px; font-weight: 700; letter-spacing: .06em; vertical-align: 1px; }
+.row.done .card .trainer { background: transparent; color: var(--on-navy-muted); border: 1px solid var(--on-navy-muted); }
 .card .dur { font-size: 12px; color: var(--muted); margin-top: 4px; font-variant-numeric: tabular-nums; }
 .tag { display: inline-block; font-size: 10.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); margin-left: 6px; vertical-align: 2px; }
 .row.cont .card { border-left-style: dashed; }
@@ -185,6 +187,31 @@ main { padding-block: 16px 40px; }
 .row.done .time { color: var(--navy-ink); }
 .row.done.pause .pausebar { color: var(--navy-ink); }
 @media (prefers-reduced-motion: reduce) { .meter .fill, .nowline { transition: none; } }
+
+/* Lecturer */
+.lectrow { margin-top: 6px; display: flex; justify-content: center; }
+.lect { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: 13px; font-weight: 600; color: var(--fg); max-width: 100%; }
+.lect svg { width: 14px; height: 14px; flex-shrink: 0; stroke: var(--mc); fill: none; stroke-width: 2; }
+.lect .lk { font-size: 10.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.daysec-h { flex-wrap: wrap; }
+.daysec-h .lectrow { flex-basis: 100%; justify-content: flex-start; margin-top: 2px; }
+.daysec-h .lect { background: transparent; border: 0; padding: 0; font-size: 13px; }
+
+/* Remarks */
+.remark { margin-top: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px 12px; }
+.remark-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+.remark label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.remark .saved { font-size: 11.5px; color: var(--muted); }
+.remark .saved.err { color: var(--m4); }
+.remark textarea {
+  display: block; width: 100%; min-height: 84px; resize: vertical;
+  font: inherit; font-size: 16px; line-height: 1.45; color: var(--fg);
+  background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px;
+}
+.remark textarea::placeholder { color: var(--muted); opacity: .8; }
+.remark textarea:focus { outline: none; border-color: var(--mc); box-shadow: 0 0 0 2px color-mix(in srgb, var(--mc) 25%, transparent); }
+.chip.wk.long { margin-left: 22px; }
+.chip.wk.long::before { content: ""; position: absolute; left: -15px; top: 18px; width: 8px; height: 14px; border-left: 2px dotted var(--muted); border-right: 2px dotted var(--muted); }
 
 .endline { margin-top: 12px; font-size: 13px; color: var(--muted); text-align: center; }
 .note { margin-top: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
@@ -241,12 +268,12 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
   <details style="margin-top:14px">
     <summary>About this schedule</summary>
     <ul>
-      <li>Based on NIOSH course schedule NIOSH-PDD-CS-SHO, Rev. MAST220801. 22 days, 165.5 hours.</li>
-      <li>Runs Mon 2 Nov to Wed 2 Dec 2026. Saturdays and Sundays are skipped.</li>
-      <li>No class on Mon 9 Nov (Deepavali holiday). Days 6 to 22 each run one weekday later.</li>
-      <li>Days 11 and 12: the source lists overlapping times. The first session is shown as 1015–1115 to match its stated hours.</li>
-      <li>Day 21: the source's 1400–1530 session overlaps the tea break, so it is shown as 1400–1515.</li>
-      <li>Day 21 site visit: bring your PPE, including safety boots.</li>
+      <li>Based on the NIOSH SHO course curriculum, Rev. YS260526 (2026). 22 days.</li>
+      <li>Runs Mon 2 Nov to Tue 8 Dec 2026, on the dates and with the lecturers in additional_info.csv. There is no class 9–16 Nov.</li>
+      <li>Day 7: the PDF puts the afternoon tea break at 15:00–15:15, inside Safe Guarding of Machinery (14:00–16:00). It is shown at 16:00–16:15, with Safe Machine Operation at 16:15–18:15, to match the 2-hour sessions and 8-hour day.</li>
+      <li>Some mornings end at 12:45 with lunch at 13:00, and lunch on Days 5, 10 and 16 runs 13:00–14:30. These are shown as the PDF lists them.</li>
+      <li>Hours of class are worked out from the session times. In a few places these differ from the hour column in the PDF.</li>
+      <li>Remarks are saved in the browser on this device only. They don't sync to other phones or computers.</li>
     </ul>
   </details>
 </footer>
@@ -256,60 +283,63 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
   var B = "BREAK", L = "LUNCH", BF = "BREAKFAST";
   function sameDay(a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
   var MODS = {
-    M1: { name: "Module 1", full: "OSH Management", v: "--m1" },
-    M2: { name: "Module 2", full: "OSH Legislation", v: "--m2" },
-    M3: { name: "Module 3", full: "Occupational Health", v: "--m3" },
-    M4: { name: "Module 4", full: "Occupational Safety", v: "--m4" }
+    M1: { name: "Module 1", full: "OSH Legislation", v: "--m1" },
+    M2: { name: "Module 2", full: "Occupational Safety", v: "--m2" },
+    M3: { name: "Module 3", full: "Occupational Health & Hygiene", v: "--m3" },
+    M4: { name: "Module 4", full: "OSH Management", v: "--m4" }
   };
   var DAYS = [
-    ["M1",[["0830","0900","Registration"],["0900","1000","Course Introduction & Ice Breaking Session"],["1000","1015",B],["1015","1045","Historical Perspective"],["1045","1300","Incident Prevention"],["1300","1400",L],["1400","1515","Incident Prevention (cont.)"],["1515","1530",B],["1530","1800","OSH Management System"]]],
-    ["M1",[["0830","1000","Policy - Organisation & Arrangements"],["1000","1015",B],["1015","1115","Policy - Organisation & Arrangements (cont.)"],["1115","1300","OSH Promotion, Training & Communication"],["1300","1400",L],["1400","1515","OSH Promotion, Training & Communication (cont.)"],["1515","1545","OSH Documentations"],["1545","1600",B],["1600","1730","OSH Documentations (cont.)"],["1730","1830","Information Technology in OSH"]]],
-    ["M1",[["0830","1000","Risk Assessment and Management"],["1000","1015",B],["1015","1300","Risk Assessment and Management (cont.)"],["1300","1400",L],["1400","1530","Risk Assessment and Management (cont.)"],["1530","1545",B],["1545","1630","Risk Assessment and Management (cont.)"],["1630","1900","Personal Protective Equipment"]]],
-    ["M1",[["0830","1000","OSH Objective & Programme"],["1000","1015",B],["1015","1145","OSH Objective & Programme (cont.)"],["1145","1300","Emergency Preparedness and Response"],["1300","1400",L],["1400","1515","Emergency Preparedness and Response (cont.)"],["1515","1530",B],["1530","1730","Emergency Preparedness and Response (cont.)"],["1730","1930","First Aid"]]],
-    ["M1",[["0830","1030","Procurement and Contractor Management"],["1030","1045",B],["1045","1230","Auditing"],["1230","1430",L],["1430","1515","Auditing (cont.)"],["1515","1530",B],["1530","1800","Performance Measurement & Monitoring"]]],
-    ["M1",[["0830","1000","Incident Investigation and Corrective Action"],["1000","1015",B],["1015","1215","Incident Investigation and Corrective Action (cont.)"],["1215","1315","Management Review"],["1315","1415",L]]],
-    ["M2",[["0830","0930","Introduction to OSH Legislation"],["0930","1000","Factories and Machinery Act 1967"],["1000","1015",B],["1015","1145","Factories and Machinery Act 1967 (cont.)"],["1145","1300","Safety Regulations under FMA 1967"],["1300","1400",L],["1400","1445","Safety Regulations under FMA 1967 (cont.)"],["1445","1515","Health Regulations under FMA 1967"],["1515","1530",B],["1530","1700","Health Regulations under FMA 1967 (cont.)"]]],
-    ["M2",[["0830","1000","Occupational Safety and Health Act 1994"],["1000","1015",B],["1015","1245","Occupational Safety and Health Act 1994 (cont.)"],["1245","1400",L],["1400","1500","OSH (Safety and Health Officer) Regulations 1997"],["1500","1515",B],["1515","1745","OSH (Safety and Health Officer) Regulations 1997 (cont.)"]]],
-    ["M2",[["0830","1000","OSH (Safety and Health Committee) Regulations 1996"],["1000","1015",B],["1015","1215","OSH (Safety and Health Committee) Regulations 1996 (cont.)"],["1215","1300","OSH (CIMAH) Regulations 1996","Control of Industrial Major Accident Hazards"],["1300","1400",L],["1400","1600","OSH (CIMAH) Regulations 1996 (cont.)"],["1600","1615",B],["1615","1815","OSH (NADOPOD) Regulations 2004","Notification of Accidents, Dangerous Occurrence, Occupational Poisoning and Occupational Disease"]]],
-    ["M2",[["0830","1000","OSH (USECHH) Regulations 2000","Use and Standards of Exposure of Chemicals Hazardous to Health"],["1000","1015",B],["1015","1100","OSH (USECHH) Regulations 2000 (cont.)"],["1100","1300","OSH (CLASS) Regulations 2013","Classification, Labelling and Safety Data Sheet of Hazardous Chemicals"],["1300","1400",L],["1400","1600","Fire Services Act 1988"],["1600","1615",B],["1615","1745","Social Security Act 1969"]]],
-    ["M2",[["0830","1000","Employment Act 1955"],["1000","1015",B],["1015","1115","Petroleum (Safety Measures) Act 1984 & Gas Supply Act 1993"],["1115","1230","Case Study"],["1230","1430",L],["1430","1515","Case Study (cont.)"],["1515","1530",B],["1530","1730","Introduction & Overview of Other Related Legislation & Codes of Practices"]]],
-    ["M3",[["0830","1000","Overview of Occupational Health"],["1000","1015",B],["1015","1115","Overview of Occupational Health (cont.)"],["1115","1245","Occupational Health Standards"],["1245","1345",L],["1345","1515","Introduction and Fundamentals of Toxicology"],["1515","1530",B],["1530","1600","Introduction and Fundamentals of Toxicology (cont.)"],["1600","1800","Overview and Basic Principles of Industrial Hygiene"]]],
-    ["M3",[["0830","1000","Chemical Hazard"],["1000","1015",B],["1015","1300","Chemical Hazard (cont.)"],["1300","1400",L],["1400","1445","Chemical Hazard (cont.)"],["1445","1545","Chemical Monitoring"],["1545","1600",B],["1600","1730","Chemical Monitoring (cont.)"]]],
-    ["M3",[["0830","1000","Chemical Health Risk Assessment"],["1000","1015",B],["1015","1115","Chemical Safety Data Sheet"],["1115","1300","CLASS"],["1300","1400",L],["1400","1415","CLASS (cont.)"],["1415","1515","Chemical Hazard Management"],["1515","1530",B],["1530","1630","Chemical Hazard Management (cont.)"]]],
-    ["M3",[["0830","1000","Ventilation"],["1000","1015",B],["1015","1145","Indoor Air Quality"],["1145","1245","Biological Monitoring and Medical Surveillance"],["1245","1400",L],["1400","1530","Biological Hazard"],["1530","1545",B],["1545","1745","Report Writing"]]],
-    ["M3",[["0830","1000","Ergonomics"],["1000","1015",B],["1015","1215","Ergonomics (cont.)"],["1215","1230","Ergonomic Risk Factors"],["1230","1430",L],["1430","1515","Ergonomic Risk Factors (cont.)"],["1515","1545","Shift Work"],["1545","1600",B],["1600","1700","Mental Workload"],["1700","1800","Occupational and Psychological Stress"]]],
-    ["M3",[["0830","1000","Physical Hazards","Noise, Radiation, Vibration, Pressurised Environment, Thermal Stress"],["1000","1015",B],["1015","1315","Physical Hazards (cont.)"],["1315","1415",L],["1415","1515","Overview of SOHELP"],["1515","1600","Examination Briefing (ECD)"]]],
-    ["M4",[["0830","1000","Machinery Hazard"],["1000","1015",B],["1015","1215","Machinery Hazard (cont.)"],["1215","1315","Safe Machine Operation"],["1315","1415",L],["1415","1545","Safe Guarding of Machinery"],["1545","1600",B],["1600","1630","Safe Guarding of Machinery (cont.)"],["1630","1730","Maintenance of Machine Guards & Tools"],["1730","1830","Safe Use of Hand Tools & Portable Power Tools"]]],
-    ["M4",[["0830","0930","General Area Fencing"],["0930","1000","Mechanical Handling"],["1000","1015",B],["1015","1245","Mechanical Handling (cont.)"],["1245","1345",L],["1345","1545","Pressurised Equipment"],["1545","1600",B],["1600","1700","Welding Safety"],["1700","1800","Housekeeping and Physical Arrangement"]]],
-    ["M4",[["0830","1030","Electrical Safety"],["1030","1045",B],["1045","1245","Working in Confined Space"],["1245","1345",L],["1345","1445","Working in Confined Space (cont.)"],["1445","1515","Manual Handling"],["1515","1530",B],["1530","1600","Manual Handling (cont.)"],["1600","1700","Transport Safety Defensive Driving (Forklift)"],["1700","1900","Office Safety"]]],
-    ["M4",[["0800","0830",BF],["0830","1300","Site Visit","Bring your PPE, including safety boots"],["1300","1400",L],["1400","1515","Discussion, Report Writing (HIRARC) and Presentation"],["1515","1530",B],["1545","1745","Discussion, Report Writing (HIRARC) and Presentation (cont.)"]]],
-    ["M4",[["0830","1000","Fire Safety"],["1000","1015",B],["1015","1245","Fire Safety (cont.)"],["1245","1445",L],["1445","1615","Construction Safety"],["1615","1630",B],["1630","1800","Construction Safety (cont.)"],["1800","1830","Closing Ceremony"]]]
+    ["M1",[["0815","0845","Registration and Course Briefing",null,"NIOSH"],["0845","1015","OSH Introduction and Terminology"],["1015","1030",B],["1030","1300","OSH Introduction and Terminology (cont.)"],["1300","1400",L],["1400","1530","Policy - Organisation & Arrangements"],["1530","1545",B],["1545","1730","Policy - Organisation & Arrangements (cont.)"]]],
+    ["M1",[["0830","1030","Occupational Safety & Health Act 1994"],["1030","1045",B],["1045","1245","Occupational Safety & Health Act 1994 (cont.)"],["1300","1400",L],["1400","1530","OSH (Safety and Health Officer) Regulations 1997"],["1530","1545",B],["1545","1745","OSH (Safety and Health Officer) Regulations 1997 (cont.)"]]],
+    ["M1",[["0830","1030","OSH (Safety and Health Committee) Regulations 1996"],["1030","1045",B],["1045","1145","OSH (Safety and Health Committee) Regulations 1996 (cont.)"],["1145","1300","OSH (CIMAH) Regulations 1996","Control of Industrial Major Accident Hazards"],["1300","1400",L],["1400","1445","OSH (CIMAH) Regulations 1996 (cont.)"],["1445","1545","OSH (USECHH) Regulations 2000","Use and Standards of Exposure of Chemicals Hazardous to Health"],["1545","1600",B],["1600","1700","OSH (USECHH) Regulations 2000 (cont.)"]]],
+    ["M1",[["0845","1045","OSH (CLASS) Regulations 2013","Classification, Labelling and Safety Data Sheet of Hazardous Chemicals"],["1045","1100",B],["1100","1300","OSH (Noise Exposure) Regulations 2019"],["1300","1400",L],["1400","1600","OSH (NADOPOD) Regulations 2004","Notification of Accidents, Dangerous Occurrence, Occupational Poisoning and Occupational Disease"],["1600","1615",B],["1615","1815","OSH (Construction Works) (Design and Management) Regulations 2024"]]],
+    ["M1",[["0830","1030","OSH (Plant Requiring Certificate of Fitness) Regulations 2024"],["1030","1045",B],["1045","1245","OSH (Special Scheme of Inspection) Regulations 2024"],["1300","1430",L],["1430","1630","OSH (Fee for Registration of Competent Person & Registered Training Provider) Regulations 2024"],["1630","1645",B],["1645","1845","Use of Industrial Code of Practice (ICOP) and Guideline"]]],
+    ["M1",[["0845","1045","Social Security Management (PERKESO)","Other related legislation","PERKESO"],["1045","1100",B],["1100","1200","Work-related Road Safety (WRRS) Management","Other related legislation","PERKESO"],["1200","1300","Fire Safety Management","Other related legislation","BOMBA"],["1300","1400",L],["1400","1600","Fire Safety Management (cont.)",null,"BOMBA"],["1600","1615",B],["1615","1715","Fire Safety Management (cont.)",null,"BOMBA"],["1715","1815","Labour and Employment Management","Other related legislation","JTK"]]],
+    ["M2",[["0830","1030","Introduction & Overview of Other Related Legislation & Codes of Practices"],["1030","1045",B],["1045","1245","Machinery Hazard"],["1245","1400",L],["1400","1600","Safe Guarding of Machinery"],["1600","1615",B],["1615","1815","Safe Machine Operation"]]],
+    ["M2",[["0845","1045","Machinery Maintenance"],["1045","1100",B],["1100","1300","General Area Fencing"],["1300","1400",L],["1400","1600","Certificated Machinery"],["1600","1615",B],["1615","1815","Mechanical Handling"]]],
+    ["M2",[["0845","1045","Transportation Safety"],["1045","1100",B],["1100","1300","Electrical Safety"],["1300","1400",L],["1400","1600","Hot Work Safety"],["1600","1615",B],["1615","1815","Confined Space Safety"]]],
+    ["M2",[["0830","1030","Construction Safety"],["1030","1045",B],["1045","1245","Construction Safety (cont.)"],["1300","1430",L],["1430","1530","Construction Safety (cont.)"],["1530","1545",B],["1545","1745","Working at Height Safety"]]],
+    ["M2",[["0900","1000","Safe Use of Hand Tools and Portable Power Tools"],["1000","1015",B],["1015","1115","Safe Use of Hand Tools and Portable Power Tools (cont.)"],["1115","1245","Office Safety"],["1300","1400",L],["1400","1430","Office Safety (cont.)"],["1430","1530","Housekeeping and Physical Arrangement"],["1530","1545",B],["1545","1645","Housekeeping and Physical Arrangement (cont.)"],["1645","1730","Examination Briefing"]]],
+    ["M3",[["0830","0930","SOHELP"],["0930","1030","Overview of Occupational Health"],["1030","1045",B],["1045","1145","Overview of Occupational Health (cont.)"],["1145","1245","Epidemiology"],["1300","1400",L],["1400","1500","Epidemiology (cont.)"],["1500","1515",B],["1515","1715","Occupational Health Standards"]]],
+    ["M3",[["0900","1000","Introduction and Fundamentals of Toxicology"],["1000","1015",B],["1015","1115","Introduction and Fundamentals of Toxicology (cont.)"],["1115","1245","Overview and Basic Principles of Industrial Hygiene"],["1300","1400",L],["1400","1430","Overview and Basic Principles of Industrial Hygiene (cont.)"],["1430","1530","Occupational Stress"],["1530","1545",B],["1545","1645","Occupational Stress (cont.)"],["1645","1745","Generic Occupational Health"]]],
+    ["M3",[["0845","1045","Occupational Ergonomics"],["1045","1100",B],["1100","1300","Occupational Ergonomics (cont.)"],["1300","1400",L],["1400","1600","Ergonomics Risk Factors & Assessment"],["1600","1615",B],["1615","1815","Ergonomics Risk Management"]]],
+    ["M3",[["0845","1045","Chemical Management"],["1045","1100",B],["1100","1300","Chemical Management (cont.)"],["1300","1400",L],["1400","1600","Pesticides"],["1600","1615",B],["1615","1815","Application of Classification, Labelling and Safety Data Sheet of Hazardous Chemicals"]]],
+    ["M3",[["0830","1030","Chemical & Biological Monitoring & Medical Surveillance"],["1030","1045",B],["1045","1245","Chemical & Biological Monitoring & Medical Surveillance (cont.)"],["1300","1430",L],["1430","1630","Ventilation & Indoor Air Quality"],["1630","1645",B],["1645","1845","Ventilation & Indoor Air Quality (cont.)"]]],
+    ["M3",[["0830","1030","Managing Occupational Hazard: Biological Hazard"],["1030","1045",B],["1045","1245","Physical Hazard","Noise, Radiation, Vibration, Pressure, Heat Stress"],["1300","1400",L],["1400","1600","Physical Hazard (cont.)"],["1600","1615",B],["1615","1715","Physical Hazard (cont.)"]]],
+    ["M4",[["0845","1045","Occupational Risk Management at Workplace"],["1045","1100",B],["1100","1300","Occupational Risk Management at Workplace (cont.)"],["1300","1400",L],["1400","1600","Occupational Risk Management at Workplace (cont.)"],["1600","1615",B],["1615","1815","Occupational Risk Management at Workplace (cont.)"]]],
+    ["M4",[["0845","1045","OSH Management Systems (ISO 45001:2018)"],["1045","1100",B],["1100","1300","OSH Management Systems (ISO 45001:2018) (cont.)"],["1300","1400",L],["1400","1600","Incident Prevention"],["1600","1615",B],["1615","1815","Incident Prevention (cont.)"]]],
+    ["M4",[["0845","1045","Communication & Performance Monitoring"],["1045","1100",B],["1100","1300","Communication & Performance Monitoring (cont.)"],["1300","1400",L],["1400","1500","Communication & Performance Monitoring (cont.)"],["1500","1515",B],["1515","1715","Managing of Emergency"]]],
+    ["M4",[["0845","1045","Managing of Emergency"],["1045","1100",B],["1100","1300","Managing of Emergency (cont.)"],["1300","1400",L],["1400","1600","Managing of Emergency (cont.)"],["1600","1615",B],["1615","1815","Managing of Emergency (cont.)"]]],
+    ["M4",[["0800","0830",BF],["0830","0900","Briefing: Workplace Assignment (WPA) Site Visit"],["0900","1300","Workplace Assignment (WPA): Site Visit","Bring your PPE, including safety boots"],["1300","1400",L],["1400","1600","WPA: Discussion & Report Writing"],["1600","1615",B],["1615","1815","WPA: Presentation"],["1815","1845","Evaluation and Closing",null,"NIOSH"]]]
   ];
 
-  // No-class weekdays (month is 0-based)
-  var HOLIDAYS = [{ d: new Date(2026, 10, 9), name: "Deepavali holiday" }];
-  function holidayOn(dt) {
-    for (var k = 0; k < HOLIDAYS.length; k++) if (sameDay(HOLIDAYS[k].d, dt)) return HOLIDAYS[k];
-    return null;
-  }
-
-  // Dates: weekdays only, from Mon 2 Nov 2026, skipping holidays
-  var dates = [], d = new Date(2026, 10, 2);
-  while (dates.length < DAYS.length) {
-    var w = d.getDay();
-    if (w !== 0 && w !== 6 && !holidayOn(d)) dates.push(new Date(d));
-    d.setDate(d.getDate() + 1);
-  }
-  // Weekday holidays inside the course, keyed by the course day that follows them
+  // Course dates, lecturers and default remarks, from additional_info.csv (month is 0-based)
+  var INFO = [
+    [[2026,10,2],"Hj Saifullah"], [[2026,10,3],"Hj Adenan"], [[2026,10,4],"Hj Saifullah"],
+    [[2026,10,5],"Hj Saifullah"], [[2026,10,6],"Hj Saifullah"], [[2026,10,7],"Bomba etc"],
+    [[2026,10,17],"Hezam"], [[2026,10,18],"Hezam"], [[2026,10,19],"Hezam"], [[2026,10,20],"Hezam"],
+    [[2026,10,23],"Hairuddin"], [[2026,10,24],"Hairuddin"], [[2026,10,25],"Hairuddin"],
+    [[2026,10,26],"Hairuddin"], [[2026,10,27],"Hairuddin"], [[2026,10,30],"Hernaini"],
+    [[2026,11,1],"Zuriana"], [[2026,11,2],"Zuriana"], [[2026,11,3],"Hj Saifullah"],
+    [[2026,11,4],"Hj Saifullah"], [[2026,11,7],"Hezam"], [[2026,11,8],"Site Visit","activity"]
+  ];
+  var dates = INFO.map(function (r) { return new Date(r[0][0], r[0][1], r[0][2]); });
+  var LECT = INFO.map(function (r) { return { name: r[1], kind: r[2] || "lecturer", remark: r[3] || "" }; });
+  var HOLIDAYS = [];
+  function holidayOn() { return null; }
   var holBefore = {};
-  HOLIDAYS.forEach(function (h) {
-    var w = h.d.getDay();
-    if (w === 0 || w === 6) return;
-    for (var k = 1; k < dates.length; k++) if (dates[k] > h.d) { (holBefore[k] = holBefore[k] || []).push(h); break; }
-  });
   var DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   var DOWL = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var DAY_MS = 86400000;
+  function gapDays(a, b) { return Math.round((b - a) / DAY_MS); }
+  var personSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>';
+  var pinSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+  function lectHtml(i) {
+    var L = LECT[i];
+    return '<span class="lect">' + (L.kind === "activity" ? pinSvg : personSvg) +
+      '<span class="lk">' + (L.kind === "activity" ? "Activity" : "Lecturer") + '</span> ' + esc(L.name) + "</span>";
+  }
   function fmtDate(dt) { return DOW[dt.getDay()] + " " + dt.getDate() + " " + MON[dt.getMonth()]; }
 
   function mins(s) { return +s.slice(0,2) * 60 + +s.slice(2); }
@@ -325,7 +355,7 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
 
   var store = {
     get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    set: function (k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
   };
 
   // Read the phone's date and work out which course day to open on:
@@ -367,8 +397,7 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
       label = "Day 1";
     } else if (after) msg = "Course completed on <b>" + fmtDate(dates[dates.length - 1]) + "</b>";
     else {
-      var why = holidayOn(now) ? holidayOn(now).name : "weekend";
-      msg = "No class today (" + why + ") · next is <b>Day " + (startIdx + 1) + "</b>, " + fmtDate(dates[startIdx]);
+      msg = "No class today · next is <b>Day " + (startIdx + 1) + "</b>, " + fmtDate(dates[startIdx]);
       label = "Next class";
     }
     var btn = after ? "" : '<button class="today-btn" id="go-today" type="button">' + label + "</button>";
@@ -387,8 +416,7 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
         return '<span class="chip hol' + (h.d.getDay() === 1 ? " wk" : "") + (sameDay(h.d, now) ? " is-today" : "") + '" role="note" aria-label="' + DOWL[h.d.getDay()] + " " + h.d.getDate() + " " + MON[h.d.getMonth()] + ", no class, " + h.name + '">' +
           '<span class="dow">' + DOW[h.d.getDay()] + '</span><span class="dn">' + h.d.getDate() + '</span><span class="dd">No class</span></span>';
       }).join("");
-      var holJustBefore = hols.length && (dt - hols[hols.length - 1].d) < 2 * 86400000;
-      if (i > 0 && dt.getDay() === 1 && !holJustBefore) cls += " wk";
+      if (i > 0 && gapDays(dates[i - 1], dt) > 1) cls += gapDays(dates[i - 1], dt) > 3 ? " wk long" : " wk";
       if (i === todayIdx) cls += " is-today";
       if (dt < startOfToday && i !== todayIdx) cls += " past";
       return pre + '<button type="button" role="tab" id="chip-' + i + '" class="' + cls + '" style="--mc:var(' + mod.v + ')" aria-selected="' + (i === sel && view === "day") + '" aria-label="Day ' + (i + 1) + ", " + DOWL[dt.getDay()] + " " + dt.getDate() + " " + MON[dt.getMonth()] + '" data-i="' + i + '">' +
@@ -443,7 +471,7 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
         '<div class="card"><span class="nowpill">Now</span>' +
         '<div class="t">' + esc(title) + (cont ? '<span class="tag">cont.</span>' : "") + "</div>" +
         (s[3] ? '<div class="sub">' + esc(s[3]) + "</div>" : "") +
-        '<div class="dur">' + dur(b - a) + "</div></div></li>";
+        '<div class="dur">' + dur(b - a) + (s[4] ? '<span class="trainer">' + esc(s[4]) + "</span>" : "") + "</div></div></li>";
     }).join("");
   }
 
@@ -513,6 +541,41 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
     });
   }
 
+  // Remarks: one box per day, saved in this browser (localStorage) as you type.
+  function remarkKey(i) { return "sho-remark-" + (i + 1); }
+  function getRemark(i) { var v = store.get(remarkKey(i)); return v === null ? LECT[i].remark : v; }
+  function remarkBox(i) {
+    return '<div class="remark">' +
+      '<div class="remark-h"><label for="remark-' + i + '">Remarks · Day ' + (i + 1) + "</label>" +
+      '<span class="saved" id="saved-' + i + '" aria-live="polite"></span></div>' +
+      '<textarea id="remark-' + i + '" class="rmk" data-i="' + i + '" rows="3" ' +
+      'placeholder="Notes for this day: homework, room changes, things to bring"></textarea></div>';
+  }
+  function grow(t) { t.style.height = "auto"; t.style.height = Math.max(t.scrollHeight + 2, 84) + "px"; }
+  function fillRemarks() {
+    main.querySelectorAll("textarea.rmk").forEach(function (t) {
+      t.value = getRemark(+t.dataset.i);
+      grow(t);
+      var sv = document.getElementById("saved-" + t.dataset.i);
+      if (sv && t.value) sv.textContent = "Saved on this device";
+    });
+  }
+  var saveTimers = {};
+  main.addEventListener("input", function (e) {
+    var t = e.target;
+    if (!t.classList || !t.classList.contains("rmk")) return;
+    grow(t);
+    var i = +t.dataset.i, sv = document.getElementById("saved-" + i);
+    if (sv) sv.textContent = "Saving…";
+    clearTimeout(saveTimers[i]);
+    saveTimers[i] = setTimeout(function () {
+      var ok = store.set(remarkKey(i), t.value);
+      if (sv) sv.textContent = ok ? "Saved on this device" : "Not saved: this browser blocks storage";
+      if (sv) sv.classList.toggle("err", !ok);
+      updateProgress();
+    }, 400);
+  });
+
   function renderDay(dir) {
     var i = sel, dt = dates[i], mod = MODS[DAYS[i][0]], sess = DAYS[i][1];
     var first = sess[0][0], last = sess[sess.length - 1][1];
@@ -520,41 +583,47 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
     var prevSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
     var nextSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
     var extra = "";
-    var holNext = holBefore[i + 1];
-    if (holNext) extra += '<div class="note"><b>No class on ' + fmtDate(holNext[0].d) + '</b> (' + esc(holNext[0].name) + '). Day ' + (i + 2) + ' is on ' + fmtDate(dates[i + 1]) + '.</div>';
-    if (i === 20) extra += '<div class="note"><b>Site visit day.</b> Bring your PPE, including safety boots. Breakfast is at 08:00.</div>';
-    if (i === 16) extra += '<div class="note"><b>Module 3 ends today</b> with the examination briefing.</div>';
+    if (i < DAYS.length - 1 && gapDays(dt, dates[i + 1]) > 3)
+      extra += '<div class="note"><b>Break after today.</b> Day ' + (i + 2) + " is on " + fmtDate(dates[i + 1]) + " (" + (gapDays(dt, dates[i + 1]) - 1) + " days off).</div>";
+    if (i === 5) extra += '<div class="note"><b>Guest speakers today</b> from PERKESO, BOMBA and JTK.</div>';
+    if (i === 10) extra += '<div class="note"><b>Examination briefing</b> at 16:45, at the end of Module 2.</div>';
+    if (i === 21) extra += '<div class="note"><b>Site visit day.</b> Bring your PPE, including safety boots. Breakfast is at 08:00.</div>';
     main.innerHTML =
       '<section class="anim" style="--mc:var(' + mod.v + ");--dx:" + (dir ? dir * 18 : 0) + 'px">' +
       '<div class="dayhead">' +
         '<button class="nav" id="prev" type="button" aria-label="Previous day"' + (i === 0 ? " disabled" : "") + ">" + prevSvg + "</button>" +
         '<div class="dayttl"><div class="mod">' + mod.name + " · " + mod.full + "</div>" +
           "<h2>Day " + (i + 1) + " · " + DOW[dt.getDay()] + " " + dt.getDate() + " " + MON[dt.getMonth()] + "</h2>" +
-          '<div class="meta">' + fmt(first) + "–" + fmt(last) + " · " + hrs.toFixed(2).replace(/\.?0+$/, "") + " h of class</div></div>" +
+          '<div class="meta">' + fmt(first) + "–" + fmt(last) + " · " + hrs.toFixed(2).replace(/\.?0+$/, "") + " h of class</div>" +
+          '<div class="lectrow">' + lectHtml(i) + "</div></div>" +
         '<button class="nav" id="next" type="button" aria-label="Next day"' + (i === DAYS.length - 1 ? " disabled" : "") + ">" + nextSvg + "</button>" +
       "</div>" +
       '<div class="daypct" hidden></div>' +
       timeline(i) + extra +
       '<div class="endline">' + (i === DAYS.length - 1 ? "End of course · " : "End of Day " + (i + 1) + " · ") + fmt(last) + "</div>" +
+      remarkBox(i) +
       "</section>";
     document.getElementById("prev").onclick = function () { if (sel > 0) select(sel - 1, -1); };
     document.getElementById("next").onclick = function () { if (sel < DAYS.length - 1) select(sel + 1, 1); };
+    fillRemarks();
     updateProgress();
   }
 
   function renderAll() {
     main.innerHTML = DAYS.map(function (day, i) {
       var dt = dates[i], mod = MODS[day[0]], sess = day[1];
-      var pre = (holBefore[i] || []).map(function (h) {
-        return '<div class="holrow"><b>' + fmtDate(h.d) + '</b><span>No class · ' + esc(h.name) + '</span></div>';
-      }).join("");
+      var pre = (i > 0 && gapDays(dates[i - 1], dt) > 3)
+        ? '<div class="holrow"><b>Break</b><span>No class ' + fmtDate(new Date(+dates[i - 1] + DAY_MS)) + " – " + fmtDate(new Date(+dt - DAY_MS)) + "</span></div>"
+        : "";
       return pre + '<section class="daysec" id="sec-' + i + '" style="--mc:var(' + mod.v + ')">' +
         '<button type="button" class="daysec-h' + (i === todayIdx ? " is-today" : "") + '" data-i="' + i + '">' +
           '<span class="n">Day ' + (i + 1) + "</span>" +
           '<span class="d">' + DOW[dt.getDay()] + " " + dt.getDate() + " " + MON[dt.getMonth()] + " · " + fmt(sess[0][0]) + "–" + fmt(sess[sess.length - 1][1]) + "</span>" +
-          '<span class="m">' + mod.name + "</span></button>" +
-        timeline(i) + "</section>";
+          '<span class="m">' + mod.name + "</span>" +
+          '<span class="lectrow">' + lectHtml(i) + "</span></button>" +
+        timeline(i) + remarkBox(i) + "</section>";
     }).join("");
+    fillRemarks();
     updateProgress();
     main.querySelectorAll(".daysec-h").forEach(function (b) {
       b.onclick = function () { setView("day"); select(+b.dataset.i, 0); };
@@ -595,7 +664,7 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
   // Swipe left / right to change day
   var sx = 0, sy = 0, tracking = false;
   main.addEventListener("touchstart", function (e) {
-    if (view !== "day" || e.touches.length !== 1) return;
+    if (view !== "day" || e.touches.length !== 1 || e.target.closest("textarea")) return;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY; tracking = true;
   }, { passive: true });
   main.addEventListener("touchend", function (e) {
