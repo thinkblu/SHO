@@ -216,6 +216,8 @@ main { padding-block: 16px 40px; }
 .endline { margin-top: 12px; font-size: 13px; color: var(--muted); text-align: center; }
 .note { margin-top: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
 .note b { color: var(--fg); }
+.note.alert, .note.alert b { color: var(--m4); }
+.note.alert { border-color: var(--m4); }
 
 /* Full list view */
 .daysec { margin-bottom: 26px; }
@@ -269,7 +271,7 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
     <summary>About this schedule</summary>
     <ul>
       <li>Based on the NIOSH SHO course curriculum, Rev. YS260526 (2026). 22 days.</li>
-      <li>Runs Mon 2 Nov to Tue 8 Dec 2026, on the dates and with the lecturers in additional_info.csv. There is no class 9–16 Nov.</li>
+      <li>Runs Mon 2 Nov to Tue 8 Dec 2026, on the dates and with the lecturers in additional_info.csv. Day 6 moved from Sat 7 Nov to Mon 16 Nov, so there is no class 7–15 Nov.</li>
       <li>Day 7: the PDF puts the afternoon tea break at 15:00–15:15, inside Safe Guarding of Machinery (14:00–16:00). It is shown at 16:00–16:15, with Safe Machine Operation at 16:15–18:15, to match the 2-hour sessions and 8-hour day.</li>
       <li>Some mornings end at 12:45 with lunch at 13:00, and lunch on Days 5, 10 and 16 runs 13:00–14:30. These are shown as the PDF lists them.</li>
       <li>Hours of class are worked out from the session times. In a few places these differ from the hour column in the PDF.</li>
@@ -316,7 +318,7 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
   // Course dates, lecturers and default remarks, from additional_info.csv (month is 0-based)
   var INFO = [
     [[2026,10,2],"Hj Saifullah"], [[2026,10,3],"Hj Adenan"], [[2026,10,4],"Hj Saifullah"],
-    [[2026,10,5],"Hj Saifullah"], [[2026,10,6],"Hj Saifullah"], [[2026,10,7],"External Parties"],
+    [[2026,10,5],"Hj Saifullah"], [[2026,10,6],"Hj Saifullah"], [[2026,10,16],"External Parties"],
     [[2026,10,17],"Hezam"], [[2026,10,18],"Hezam"], [[2026,10,19],"Hezam"], [[2026,10,20],"Hezam"],
     [[2026,10,23],"Hairuddin"], [[2026,10,24],"Hairuddin"], [[2026,10,25],"Hairuddin"],
     [[2026,10,26],"Hairuddin"], [[2026,10,27],"Hairuddin"], [[2026,10,30],"Hernaini"],
@@ -587,7 +589,7 @@ footer ul { padding-left: 18px; margin: 8px 0 0; }
       extra += '<div class="note"><b>Break after today.</b> Day ' + (i + 2) + " is on " + fmtDate(dates[i + 1]) + " (" + (gapDays(dt, dates[i + 1]) - 1) + " days off).</div>";
     if (i === 5) extra += '<div class="note"><b>Guest speakers today</b> from PERKESO, BOMBA and JTK.</div>';
     if (i === 10) extra += '<div class="note"><b>Examination briefing</b> at 16:45, at the end of Module 2.</div>';
-    if (i === 21) extra += '<div class="note"><b>Site visit day.</b> Bring your PPE, including safety boots. Breakfast is at 08:00.</div>';
+    if (i === 21) extra += '<div class="note alert"><b>Site visit day.</b> Bring your PPE, including safety boots. Breakfast is at 08:00.</div>';
     main.innerHTML =
       '<section class="anim" style="--mc:var(' + mod.v + ");--dx:" + (dir ? dir * 18 : 0) + 'px">' +
       '<div class="dayhead">' +
